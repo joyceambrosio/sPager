@@ -3,26 +3,30 @@
  */
 package modelo;
 
+import controller.ExceptionController;
+import controller.VerificaEmail;
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * @author tuler
  */
-public class Pessoa implements Serializable{
+public class Pessoa implements Serializable {
+
     private String nome;
     private String email;
     private String usuario;
     private String senha;
     private Situacao situacao;
 
-    public Pessoa() {}
+    public Pessoa() {
+    }
 
-    public Pessoa(String nome, String email, String usuario, String senha) {
-        this.nome = nome;
-        this.email = email;
-        this.usuario = usuario;
-        this.senha = senha;
+    public Pessoa(String nome, String email, String usuario, String senha) throws ExceptionController {
+        setNome(nome);
+        setEmail(email);
+        setUsuario(usuario);
+        setSenha(senha);
         this.situacao = new Situacao();
         setSituacao("Conhecendo o sistema...", true);
     }
@@ -31,15 +35,26 @@ public class Pessoa implements Serializable{
         return nome;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNome(String nome) throws ExceptionController {
+        if (nome.equals(" ")) {
+            throw new ExceptionController("O nome não pode ser vazio");
+        } else {
+            this.nome = nome;
+        }
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws ExceptionController {
+        VerificaEmail verificaEmail = new VerificaEmail();
+        if (verificaEmail.verifica(email) == false) {
+            throw new ExceptionController("Email inválido");
+        } else {
+            this.email = email;
+        }
+
         this.email = email;
     }
 
@@ -55,15 +70,19 @@ public class Pessoa implements Serializable{
         return senha;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setSenha(String senha) throws ExceptionController {
+        if (senha.equals(" ")) {
+            throw new ExceptionController("A senha não pode ser vazia");
+        } else {
+            this.senha = senha;
+        }
     }
 
     public Situacao getSituacao() {
         return situacao;
     }
 
-    public final void setSituacao(String atividade, boolean disponibilidade){
+    public final void setSituacao(String atividade, boolean disponibilidade) {
         this.situacao.setPessoa(this);
         this.situacao.setAtividade(atividade);
         this.situacao.setDisponibilidade(disponibilidade);
@@ -93,9 +112,6 @@ public class Pessoa implements Serializable{
             return false;
         }
         final Pessoa other = (Pessoa) obj;
-        if (!Objects.equals(this.usuario, other.usuario)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.usuario, other.usuario);
     }
 }

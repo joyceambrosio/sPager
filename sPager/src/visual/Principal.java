@@ -5,6 +5,7 @@ package visual;
  */
 
 
+import controller.ExceptionController;
 import modelo.DAOPessoa;
 import modelo.DAORecado;
 import modelo.Dados;
@@ -15,7 +16,7 @@ import modelo.Recado;
  * @author tuler
  */
 public class Principal {
-    static public void testeClasses(){
+    static public void testeClasses() throws Exception{
         DAOPessoa.salvar(new Pessoa("Joao Souza","joao@mail.com","joao","123"));
         DAOPessoa.salvar(new Pessoa("Maria da Silva","maria@mail.com","maria","222"));
         DAOPessoa.salvar(new Pessoa("Jose Alves","jose@mail.com","jose","321"));
@@ -32,7 +33,7 @@ public class Principal {
             System.out.println(recado.toString());
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         testeClasses();
     }
 }
